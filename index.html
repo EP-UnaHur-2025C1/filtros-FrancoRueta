@@ -5,9 +5,23 @@
     <script src="paises.js" type="text/javascript"></script>
     <script type="text/javascript">
 
+      //filtros
+      function filtroPaisesSuperpoblados(pais) {
+        return pais.population > 100000000;
+      }
+      function filtroPaisesInsulares(pais) {
+        return pais.borders === undefined || pais.borders.length === 0;
+      }
+      function filtroPaisesGuaranies(pais) {
+      return pais.languages !== undefined && pais.languages["grn"] !== undefined;
+      }
+
       async function  inicializar() {
         this.filtros = await new FiltroPaises();  
         this.filtros.addFiltro('Sudamerica', (e) => e.subregion ==='South America');
+        this.filtros.addFiltro('Superpoblados', filtroPaisesSuperpoblados);
+        this.filtros.addFiltro('Insulares', filtroPaisesInsulares);
+        this.filtros.addFiltro('Guaranies', filtroPaisesGuaranies);
         const selectElement = document.getElementById('paises-select');
         const filtrosDisponibles = this.filtros.getFiltros()
         filtrosDisponibles.forEach( f => selectElement.add(new Option(f.name, f.name)));
